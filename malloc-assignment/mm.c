@@ -36,15 +36,15 @@
 /* Team structure */
 team_t team = {
 	/* Team name */
-	"ateam",
+	"Divide and conquer",
 	/* note that we will add a 10% bonus for
 	* working alone */
 	/* the maximum number of members per team
 	 * is four */
 	/* First member's full name */
-	"Witty Srisa-an",
+	"Rahul Prajapati",
 	/* First member's email address */
-	"witty@cse.unl.edu",
+	"rprajapati2@unl.edu",
 	/* Second member's full name (leave
 	* blank if none) */
 	"",
