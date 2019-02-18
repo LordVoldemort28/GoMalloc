@@ -39,4 +39,13 @@ because of unimplemented `mm_realloc`.
     , such as allocating the heap area. The function should return -1
     if some problem occurs otherwise starting address of heap
 
-    * `mm_malloc`: The 
+    * `mm_malloc`: The routine returns a pointer to an allocated block payload of least `size` bytes. The entire allocated block should lie within the heap region and should not overlap with any other allocated chunck.
+    <br /> Your malloc implementation should do likewise and always return 8 bytes aligned pointer. __Where `mdriver` program tests from for 8 bytes alignment and terminates if the alignements check fails.__
+    * `mm_free`: 
+        * The `mm_free` routine frees the block pointed to by `ptr`.
+        * It returns nothing. 
+        * This routine is only guaranteed to work correctly when the passed pointer(`ptr`) was returned by an earlier call to `mm_malloc` or `mm_realloc` and has not yet been freed.
+    * `mm_realloc`: Routine return a pointer to an allocated region of at least size bytes with the following:-
+        * If `ptr` us NULL, the call is equivalent to `mm_malloc( size )`
+        * If `size` is equal to zero, the call is equivalent to `mm_free( ptr )`
+        * If `ptr` is not NULL, it must have been 
