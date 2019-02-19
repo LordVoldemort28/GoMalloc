@@ -48,4 +48,8 @@ because of unimplemented `mm_realloc`.
     * `mm_realloc`: Routine return a pointer to an allocated region of at least size bytes with the following:-
         * If `ptr` us NULL, the call is equivalent to `mm_malloc( size )`
         * If `size` is equal to zero, the call is equivalent to `mm_free( ptr )`
-        * If `ptr` is not NULL, it must have been 
+        * If `ptr` is not NULL, it must have been returned by an earlier call to `mm_malloc` or `mm_relloc`.
+            * The call to `mm_relloc` changes the size of memory block pointed to by `ptr`( the old block ) to `size` bytes and returns the address of the new block.
+    * For any trouble check `man` page of any function.
+
+    
