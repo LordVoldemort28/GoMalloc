@@ -96,7 +96,7 @@ because of unimplemented `mm_realloc`.
         * First 9 trace contains request to `malloc` and `free `
         * Last 2 contains request for `realloc`,`malloc` and `free `
     
-Implentation
+Implementation
 -------------
 
 * __Malloc__
