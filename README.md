@@ -70,3 +70,35 @@ because of unimplemented `mm_realloc`.
         * `void *mem_heap_hi( void )` returns a address of the lasy byte in the heap
         * `size_t mem_heapsize( void ) ` returns the current size of heap in the bytes
         * `size_t mem_pagesize( void )` returns the page size of the system
+    * __Trace driven driver program flags__
+        * `-t < tracedir >`: Looks for the default trace files in directory `tracedir` instead of the default directory defined in `config.h`
+        * `-f < tracefile >`: Use one partcular `tracefile` from testing instead of the default set of tracefiles.
+        * `-h`: Print the summary of the command line arguements 
+        * `-l`: Run and measure `libc` malloc in addition to the students's malloc package
+        * `-v`: Verbose output. Print a performance breakdown from each tracefile in a compact table. 
+        * `-V`: More verbose output. Prints additional diagnostic information useful for debugging.
+* __Implicit List system__
+    * The system must not use boundary tags. Traversing the list can only go in one direction
+    * You cannot change `mm-init` and `mm_malloc`. Simply add code to complete `mm_free` and `mm_realloc`.
+    * `mm_realloc` must support all conditions stated as part of the rellocation semantics.
+    * `mm_free` must support coalescing. Without it, your system will not pass all 11 test.
+* __Explicit List System__
+    * Add boundary tags to the intial block in `mm_init`. 
+    * Choose a criterion to insert a free block into the list. The criterion should not affects correctness but can yield better performance for your system. This can lead to more performance points 
+    * `mm_realloc` implementation must follow the previously stated semantics.
+    * `mm_free` must support coalescing.
+
+* __Hints__
+    * Use the `mdriver -f` option. During initial development, using tiny trace files will simplify debug- ging and testing. We have included two such trace files (`short1,2-bal.rep`) that you can use for initial debugging.
+    * Use the `mdriver -v and -V `options. The -v option will give you a detailed summary for each trace file. The -V will also indicate when each trace file is read, which will help you isolate errors.
+    * Encapsulate your pointer arithmetic in C preprocessor macros.
+    * __Stages__
+        * First 9 trace contains request to `malloc` and `free `
+        * Last 2 contains request for `realloc`,`malloc` and `free `
+    
+Implentation
+-------------
+
+* __Malloc__
+* __Free__
+* __Realloc__
