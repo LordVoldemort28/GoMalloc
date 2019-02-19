@@ -52,4 +52,21 @@ because of unimplemented `mm_realloc`.
             * The call to `mm_relloc` changes the size of memory block pointed to by `ptr`( the old block ) to `size` bytes and returns the address of the new block.
     * For any trouble check `man` page of any function.
 
-    
+* __Heap Consistency Checker Should Inculde Function__
+    * Is every block in the free list marked as free?
+    * Are there any contiguous free bloacks that somehow escaped coalescing
+    * Is every free block actually in the free list 
+    * Do the pointers in the free list point to valid free blocks?
+    * Do any allocated blocks overlap?
+    * Do the pointers in a heap block point to valid heap addresses?
+
+* __Support Routines__
+    * `memlib.c` contains function like
+        * `void mem_init( void )` Which initialize the memory system model 
+        * `void mem_deinit( void )` free the storage used by the memory system model
+        * `void mem_reset_brk()` reset the simulated brk pointer to make an empty heap
+        * `void *mem_sbrk( int incr )`Expands the heap by `incr` bytes, where `incr` is a positive non-zero integers and returns a generic pointer to the first byte of the newly allocated heap area. The semantics are identical to the unix `sbrk` function, except that `mem_sbrk` accepts only a positive non-zero integer argument.<br />simple model of the sbrk function. Extends the heap by incr bytes and returns the start address of the new area. In this model, the heap cannot be shrunk.
+        * `void *mem_heap_lo( void )` returns address of first byte in the heap
+        * `void *mem_heap_hi( void )` returns a address of the lasy byte in the heap
+        * `size_t mem_heapsize( void ) ` returns the current size of heap in the bytes
+        * `size_t mem_pagesize( void )` returns the page size of the system
