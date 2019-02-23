@@ -60,7 +60,7 @@ team_t team = {
 /* You can add more macros and constants in this section */
 #define WSIZE       4       /* word size (bytes) */  
 #define DSIZE       8       /* doubleword size (bytes) */
-#define CHUNKSIZE  (1<<12)  /* initial heap size (bytes) */
+#define CHUNKSIZE  (1<<12)  /* initial heap size (4096 bytes) */ 
 #define OVERHEAD    4       /* overhead of header (bytes) */
 
 #define MAX(x, y) ((x) > (y)? (x) : (y))  
@@ -161,7 +161,9 @@ void *mm_malloc(size_t size)
 /* $end mmmalloc */
 
 /* 
- * mm_free - Free a block 
+ * mm_free - Free a block  
+ * basically dellocate the block by existing allocated block can be checked by 
+ * 'a' refrence in the starting of the block
  */
 /* $begin mmfree */
 void mm_free(void *bp)
@@ -169,6 +171,17 @@ void mm_free(void *bp)
 	//printf("call mm_free\n");
 
 	/* You need to implement this function */
+	//Check the allocation of that bit is allocated or not
+	//Use GET_SIZE(p) and GET_ALLOC(p) to check status
+
+	if( GET_ALLOC(bp) == '1' )
+	{
+		*bp = *bp & -2; // deallocating block
+		size_t 
+
+	}
+
+	
 }
 
 /* $end mmfree */
