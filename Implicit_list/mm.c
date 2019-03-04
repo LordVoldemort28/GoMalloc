@@ -43,7 +43,7 @@ team_t team = {
 	 * is four */
 	/* First member's full name */
 	"Rahul Prajapati",
-	/* First member's email addr"rprajapati2@unl.edu",
+	/* First member's email addr"",
 	/* Second member's full name (leave
 	* blank if none) */
 	"",
