@@ -36,15 +36,15 @@
 /* Team structure */
 team_t team = {
 	/* Team name */
-	"Divide and conquer",
+	"ateam",
 	/* note that we will add a 10% bonus for
 	* working alone */
 	/* the maximum number of members per team
 	 * is four */
 	/* First member's full name */
-	"Rahul Prajapati",
+	"Witty Srisa-an",
 	/* First member's email address */
-	"rprajapati2@unl.edu",
+	"witty@cse.unl.edu",
 	/* Second member's full name (leave
 	* blank if none) */
 	"",
@@ -60,7 +60,7 @@ team_t team = {
 /* You can add more macros and constants in this section */
 #define WSIZE       4       /* word size (bytes) */  
 #define DSIZE       8       /* doubleword size (bytes) */
-#define CHUNKSIZE  (1<<12)  /* initial heap size (4096 bytes) */ 
+#define CHUNKSIZE  (1<<12)  /* initial heap size (bytes) */
 #define OVERHEAD    4       /* overhead of header (bytes) */
 
 #define MAX(x, y) ((x) > (y)? (x) : (y))  
@@ -161,9 +161,7 @@ void *mm_malloc(size_t size)
 /* $end mmmalloc */
 
 /* 
- * mm_free - Free a block  
- * basically dellocate the block by existing allocated block can be checked by 
- * 'a' refrence in the starting of the block
+ * mm_free - Free a block 
  */
 /* $begin mmfree */
 void mm_free(void *bp)
@@ -171,17 +169,6 @@ void mm_free(void *bp)
 	//printf("call mm_free\n");
 
 	/* You need to implement this function */
-	//Check the allocation of that bit is allocated or not
-	//Use GET_SIZE(p) and GET_ALLOC(p) to check status
-
-	if( GET_ALLOC(bp) == '1' )
-	{
-		*bp = *bp & -2; // deallocating block
-		size_t 
-
-	}
-
-	
 }
 
 /* $end mmfree */
