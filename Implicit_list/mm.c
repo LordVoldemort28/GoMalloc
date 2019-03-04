@@ -43,7 +43,8 @@ team_t team = {
 	 * is four */
 	/* First member's full name */
 	"Rahul Prajapati",
-	/* First member's email addr"",
+	/* First member's email address */
+	"rprajapati2@unl.edu",
 	/* Second member's full name (leave
 	* blank if none) */
 	"",
@@ -196,7 +197,8 @@ void mm_free(void *bp)
 		if(GET_ALLOC(HDRP(prev_block_ptr)) == FREEBLOCK)
 		{
 			current_block_size += GET_SIZE(HDRP(prev_block_ptr));
-			PUT(HDRP(prev_block_ptr), PACK(current_block_size, FREEBLOCK));
+			bp = prev_block_ptr;
+			PUT(HDRP(bp), PACK(current_block_size, FREEBLOCK));
 		}
 
 
@@ -227,7 +229,7 @@ void *mm_realloc(void *ptr, size_t size)
 			mm_free(ptr);
 			return 0;
 		}
-
+		
 		//TODO: Ready to asign in heap 
 		void *new_assign_ptr = mm_malloc(size);
 
@@ -235,14 +237,15 @@ void *mm_realloc(void *ptr, size_t size)
 		if(current_size < size)
 		{
 			memcpy(new_assign_ptr, ptr, current_size);
-		
+			mm_free(ptr);
+			return new_assign_ptr;
 		}else
 		{
 			memcpy(new_assign_ptr, ptr, size);
-		
+			mm_free(ptr);
+			return new_assign_ptr;
+
 		}
-		mm_free(ptr);
-		return new_assign_ptr;
 	}
 	return NULL;
 
