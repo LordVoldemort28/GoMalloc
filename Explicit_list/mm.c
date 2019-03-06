@@ -1,16 +1,14 @@
 /* 
- * mm-handout.c -  Simple allocator based on implicit free lists and 
+ * mm-handout.c - LIFO and Doubly linked list based on EXpilicit free lists and 
  *                 first fit placement (similar to lecture4.pptx). 
- *                 It does not use boundary tags and does not perform
- *                 coalescing. Thus, it tends to run out of memory 
- *                 when used to allocate objects in large traces  
- *                 due to external fragmentation.
- *
+ *                 It does use boundary tags and does perform
+ *                 coalescing. But still LIFO has some internal fragmentation 
+ * 									which lower downs the performance then original lib malloc
  * Each block has a header of the form:
  * 
  *      31                     3  2  1  0 
  *      -----------------------------------
- *     | s  s  s  s  ... s  s  s  0  0  a/f
+ *     |a/f s  s  s  s  ... s  s  s  0  0  a/f
  *      ----------------------------------- 
  * 
  * where s are the meaningful size bits and a/f is set 
@@ -36,7 +34,7 @@
 /* Team structure */
 team_t team = {
 	/* Team name */
-	"Divide and conquer",
+	" 3 idiots ",
 	/* note that we will add a 10% bonus for
 	* working alone */
 	/* the maximum number of members per team
@@ -44,13 +42,17 @@ team_t team = {
 	/* First member's full name */
 	"Rahul Prajapati",
 	/* First member's email address */
-	"rprajapati2@unl.edu",
+	"rprajapati@cse.unl.edu",
 	/* Second member's full name (leave
 	* blank if none) */
-	"",
+	"Akshat Goel",
 	/* Second member's email address
 	* (leave blank if none) */
-	""
+	"agoel@cse.unl.edu",
+	/*Thrid team memeber*/
+	"Shivani Tamkiya",
+	
+	"stamkiya@cse.unl.edu"
 };
 
 
@@ -62,8 +64,8 @@ team_t team = {
 #define DSIZE       8       /* doubleword size (bytes) */
 #define CHUNKSIZE  (1<<12)  /* initial heap size (bytes) */
 #define OVERHEAD    4       /* overhead of header (bytes) */
-#define FREEBLOCK 	0x1
-#define ALLOCATE 	0x0
+#define FREEBLOCK 	1
+#define ALLOCATE 		0
 
 #define MAX(x, y) ((x) > (y)? (x) : (y))  
 
@@ -194,6 +196,9 @@ void mm_free(void *bp)
 	return; 
 }
 
+/* We are checking the allocation bit of the next and previous block.
+If even one of them is free, we are removing it from the free list and adding its size in the current block.
+Wer are looping through the next and previous possible blocks till they are free. */
 
 void* check_coalesce(void *bp)
 {
@@ -204,22 +209,69 @@ void* check_coalesce(void *bp)
 	 //TODO: If both next and previous block 
   if(next_block_alloc == FREEBLOCK && prev_block_alloc == FREEBLOCK)
   {
-
+			void* current_bp = bp;
+			while( next_block_alloc != ALLOCATE)
+			{
+			current_size_block += GET_SIZE(HDRP(NEXT_BLKP(bp)));
+			//Removing free block from list
+			remove_free_block(NEXT_BLKP(bp));
+			bp = NEXT_BLKP(bp);
+			next_block_alloc = GET_ALLOC(HDRP(NEXT_BLKP(bp)));
+			}
+			
+			bp = current_bp;
+			
+			while( prev_block_alloc != ALLOCATE)
+			{
+			current_size_block += GET_SIZE(HDRP(PREV_BLKP(bp)));
+			//Removing free block from list
+			remove_free_block(PREV_BLKP(bp));
+			bp = PREV_BLKP(bp);
+			prev_block_alloc = GET_ALLOC(HDRP(PREV_BLKP(bp)));
+			}
+			
+			PUT(HDRP(bp), PACK(current_size_block, FREEBLOCK));
+			PUT(FTRP(bp), PACK(current_size_block, FREEBLOCK));
   }
 	 //TODO: If only next block is free 
 	else if(next_block_alloc == FREEBLOCK && prev_block_alloc == ALLOCATE)
   {
-		
+			void* current_bp = bp;
+			while( next_block_alloc != ALLOCATE)
+			{
+			current_size_block += GET_SIZE(HDRP(NEXT_BLKP(bp)));
+			//Removing free block from list
+			remove_free_block(NEXT_BLKP(bp));
+			bp = NEXT_BLKP(bp);
+			next_block_alloc = GET_ALLOC(HDRP(NEXT_BLKP(bp)));
+			}
+			bp = current_bp;
+			PUT(HDRP(bp), PACK(current_size_block, FREEBLOCK));
+			PUT(FTRP(bp), PACK(current_size_block, FREEBLOCK));
   }
     //TODO: If only previous block is free 
   else if(next_block_alloc == ALLOCATE && prev_block_alloc == FREEBLOCK)
 	{
-        
+			while( prev_block_alloc != ALLOCATE)
+			{
+			current_size_block += GET_SIZE(HDRP(PREV_BLKP(bp)));
+			//Removing free block from list
+			remove_free_block(PREV_BLKP(bp));
+			bp = PREV_BLKP(bp);
+			prev_block_alloc = GET_ALLOC(HDRP(PREV_BLKP(bp)));
+			}
+			PUT(HDRP(bp), PACK(current_size_block, FREEBLOCK));
+			PUT(FTRP(bp), PACK(current_size_block, FREEBLOCK));
+
   }
+	//Adding new block in free list 
 	add_free_block(bp);
 	return bp;
 }
+
+
 //Checked
+/*  Adding the free block to the free list to keep track of all the free blocks */
 static void add_free_block(void *bp)
 {
     if(bp != NULL)
@@ -235,6 +287,7 @@ static void add_free_block(void *bp)
 }
 
 //Checked
+/*  removing the free block from the free list to keep track of all the free blocks */
 static void remove_free_block(void *bp)
 {	
 	if(bp != NULL )
