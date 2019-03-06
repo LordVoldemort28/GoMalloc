@@ -197,27 +197,13 @@ void mm_free(void *bp)
 
 void* check_coalesce(void *bp)
 {
-  size_t current_size_block = GET_SIZE(HDRP(bp));
-  size_t next_block_alloc = GET_ALLOC(HDRP(NEXT_BLKP(bp)));
+    size_t next_block_alloc = GET_ALLOC(HDRP(NEXT_BLKP(bp)));
 	size_t prev_block_alloc = GET_ALLOC(HDRP(PREV_BLKP(bp)));
+    size_t current_size_block = GET_SIZE(HDRP(bp));
+	//TODO: If next block is free then add size with current block 
+	//TODO: Check if previous block is free or not by traversing through whole heap
+	//TODO: If previous block is free then add size and make current block to previous block
     
-	 //TODO: If both next and previous block 
-  if(next_block_alloc == FREEBLOCK && prev_block_alloc == FREEBLOCK)
-  {
-
-  }
-	 //TODO: If only next block is free 
-	else if(next_block_alloc == FREEBLOCK && prev_block_alloc == ALLOCATE)
-  {
-		
-  }
-    //TODO: If only previous block is free 
-  else if(next_block_alloc == ALLOCATE && prev_block_alloc == FREEBLOCK)
-	{
-        
-  }
-	add_free_block(bp);
-	return bp;
 }
 //Checked
 static void add_free_block(void *bp)
@@ -350,6 +336,7 @@ static void *extend_heap(size_t words)
 		return NULL;
 
     /* Initialize free block header and the epilogue header */
+    //TODO: Free header and footer block 
     PUT(HDRP(bp), PACK(size, FREEBLOCK));         
     PUT(FTRP(bp), PACK(size, FREEBLOCK));
     
@@ -399,12 +386,10 @@ static void *find_fit(size_t asize)
 	if (free_block_listp == NULL){ return NULL; }
 	void* bp;
     	/* first fit search */
-			//TODO: Loop through free block  to find fit
     for(bp = free_block_listp; GET_ALLOC(HDRP(bp)) == FREEBLOCK; bp = NEXT_FREEBLK(bp))
 		  {
 			if (NEXT_FREEBLK(bp) != NULL)
 			{
-				//TODO: Check if size is fitting are smaller return block
 				if((asize <= GET_SIZE(HDRP(bp)))) 
 				{
 					return bp;
@@ -417,12 +402,12 @@ static void *find_fit(size_t asize)
 //Checked
 static void printblock(void *bp)
 {
-	  size_t header_size, header_alloc;
+	    size_t header_size, header_alloc;
+        size_t footer_size, footer_alloc;
+
 		header_size = GET_SIZE(HDRP(bp));
 		header_alloc = GET_ALLOC(HDRP(bp));
 
-		//TODO: Assign footer vaiables for size and alloc
-    size_t footer_size, footer_alloc;
 		footer_size = GET_SIZE(FTRP(bp));
 		footer_alloc = GET_ALLOC(FTRP(bp));
 		
@@ -432,7 +417,6 @@ static void printblock(void *bp)
 		}
 
 		printf("%p: header: [%zu:%c]\n", bp, header_size, (header_alloc ? 'f' : 'a'));
-		//Print footer
 		printf("%p: footer: [%zu:%c]\n", bp, footer_size, (footer_alloc ? 'f' : 'a'));
 }
 
